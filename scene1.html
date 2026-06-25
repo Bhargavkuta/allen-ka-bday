@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scene 1 — Dawn</title>
+<link rel="stylesheet" href="css/scene1.css">
+</head>
+<body>
+ 
+<div class="stage">
+  <div class="sky" id="sky"></div>
+  <div class="stars" id="stars"></div>
+  <div class="mist" id="mist"></div>
+  <div class="daylight-overlay" id="daylightOverlay"></div>
+ 
+  <div class="sun-wrap"><div class="sun" id="sun"></div></div>
+ 
+  <div class="mountains" id="mountains">
+    <svg class="mtn-layer mtn-far" viewBox="0 0 1400 400" preserveAspectRatio="none">
+      <path d="M0,400 L0,260 L120,180 L240,240 L380,140 L520,220 L650,160 L800,230 L950,170 L1100,250 L1250,190 L1400,260 L1400,400 Z"/>
+    </svg>
+    <svg class="mtn-layer mtn-mid" viewBox="0 0 1400 400" preserveAspectRatio="none">
+      <path d="M0,400 L0,320 L150,230 L300,300 L430,210 L600,300 L760,240 L900,310 L1080,250 L1230,320 L1400,290 L1400,400 Z"/>
+    </svg>
+    <svg class="mtn-layer mtn-near" viewBox="0 0 1400 400" preserveAspectRatio="none">
+      <path d="M0,400 L0,360 L180,300 L350,350 L500,290 L680,355 L850,310 L1000,360 L1180,320 L1400,355 L1400,400 Z"/>
+    </svg>
+  </div>
+ 
+  <svg class="carnival" viewBox="0 0 1400 300" preserveAspectRatio="xMidYMax meet" id="carnivalSvg" aria-label="A carnival waking up at dawn">
+    <path class="ground" d="M0 258 Q160 240 330 259 T690 253 T1040 258 T1400 247 V300 H0Z"/>
+
+    <!-- Ferris wheel: the whole assembly rotates slowly, while the frame stays planted. -->
+    <g class="wheel">
+      <circle class="structure wheel-rim" cx="220" cy="157" r="112"/>
+      <g class="structure wheel-spoke">
+        <path d="M220 45V269M108 157H332M141 78L299 236M141 236L299 78M164 60L276 254M123 101L317 213M123 213L317 101M164 254L276 60"/>
+      </g>
+      <g>
+        <path class="gondola" d="M207 36h26l-4 18h-18z"/><path class="gondola" d="M207 260h26l-4 18h-18z"/>
+        <path class="gondola" d="M95 148h26l-4 18H99z"/><path class="gondola" d="M319 148h26l-4 18h-18z"/>
+        <path class="gondola" d="M128 69h26l-4 18h-18z"/><path class="gondola" d="M286 227h26l-4 18h-18z"/>
+        <path class="gondola" d="M128 227h26l-4 18h-18z"/><path class="gondola" d="M286 69h26l-4 18h-18z"/>
+      </g>
+      <g>
+        <circle class="light" cx="220" cy="45" r="5"/><circle class="light" cx="220" cy="269" r="5"/>
+        <circle class="light" cx="108" cy="157" r="5"/><circle class="light" cx="332" cy="157" r="5"/>
+        <circle class="light" cx="141" cy="78" r="5"/><circle class="light" cx="299" cy="236" r="5"/>
+        <circle class="light" cx="141" cy="236" r="5"/><circle class="light" cx="299" cy="78" r="5"/>
+      </g>
+    </g>
+    <path class="structure" stroke-width="8" d="M220 157L160 288M220 157l60 131M142 288h156"/>
+    <circle cx="220" cy="157" r="15" fill="#FFF4E0" stroke="#C84B4B" stroke-width="6"/>
+
+    <!-- Ticket booth -->
+    <g>
+      <path class="booth" d="M385 184h145v104H385z"/><path class="booth-roof" d="M370 184l20-31h135l20 31z"/>
+      <path class="sign" d="M392 137h131v36H392z"/><text class="sign-text" x="458" y="162">TICKETS</text>
+      <path class="tent-opening" d="M415 211h85v48h-85z"/><circle class="light" cx="397" cy="184" r="5"/><circle class="light" cx="430" cy="184" r="5"/><circle class="light" cx="463" cy="184" r="5"/><circle class="light" cx="496" cy="184" r="5"/><circle class="light" cx="529" cy="184" r="5"/>
+    </g>
+
+    <!-- Striped tents -->
+    <g>
+      <path class="tent" d="M535 288L675 89l150 199z"/>
+      <path class="tent-stripe" d="M675 89l-84 199h53zM675 89l28 199h55z"/>
+      <path class="tent-opening" d="M648 288q27-79 56 0z"/>
+      <path class="structure" stroke-width="4" d="M675 91V55"/><path class="flag" d="M676 55l65 16-65 18z"/>
+      <circle class="light" cx="675" cy="99" r="7"/>
+    </g>
+    <g>
+      <path class="tent" d="M805 288L905 151l107 137z"/>
+      <path class="tent-stripe" d="M905 151l-55 137h37zM905 151l24 137h39z"/>
+      <path class="tent-opening" d="M885 288q21-55 43 0z"/><circle class="light" cx="905" cy="160" r="6"/>
+    </g>
+
+    <!-- Big top and bunting -->
+    <path class="structure" stroke-width="3" d="M1000 95Q1170 126 1382 80"/>
+    <g><path class="bunting" d="M1018 99l20 30 15-25z"/><path class="flag" d="M1075 108l19 31 17-26z"/><path class="bunting" d="M1132 116l20 31 16-28z"/><path class="flag" d="M1192 116l20 30 16-34z"/><path class="bunting" d="M1252 108l20 30 16-35z"/><path class="flag" d="M1315 96l20 29 15-34z"/></g>
+    <g>
+      <path class="tent" d="M1010 288l170-230 190 230z"/>
+      <path class="tent-stripe" d="M1180 58l-105 230h60zM1180 58l20 230h66z"/>
+      <path class="tent-opening" d="M1142 288q41-105 83 0z"/>
+      <path class="structure" stroke-width="4" d="M1180 60V25"/><path class="flag" d="M1181 25l78 18-78 21z"/>
+      <circle class="light" cx="1180" cy="69" r="8"/><circle class="light" cx="1100" cy="195" r="5"/><circle class="light" cx="1263" cy="195" r="5"/>
+    </g>
+  </svg>
+
+  <button class="hidden-vadapav" id="dawnVadapav" data-vadapav-id="dawn-sleepy" aria-label="A suspicious sleepy vadapav is hiding near the mountains">
+    <span class="vada-bun"></span><span class="vada-filling"></span>
+    <span class="vada-eye left"></span><span class="vada-eye right"></span><span class="vada-mouth"></span>
+  </button>
+
+  <div class="hunt-counter" aria-label="Vadapav scavenger hunt progress"><span aria-hidden="true">🥔</span><strong id="huntCount">0 / 5</strong></div>
+  <button class="music-toggle" id="musicToggle" type="button" aria-pressed="false" aria-label="Turn carnival music on">
+    <span class="music-icon" aria-hidden="true">♪</span><span id="musicLabel">Music</span>
+  </button>
+  <div class="hunt-toast" id="huntToast" role="status" aria-live="polite"></div>
+ 
+  <div class="message-wrap">
+    <div class="greeting" id="greeting">Hey Allen,<br><span class="accent">vadapav</span> here.</div>
+    <div class="subtext" id="subtext">Though I can't celebrate this birthday with you in person, I figured I'd build you something instead — so step right up, the carnival's about to open.</div>
+    <button class="ticket-btn" id="ticketBtn">🎟️ Get Your Tickets</button>
+    <button class="continue-btn" id="continueBtn">Continue to the Carnival →</button>
+  </div>
+ 
+  <button class="skip-hint" id="skipHint">Skip ahead →</button>
+</div>
+ 
+<script src="js/scene-router.js"></script>
+<script src="js/music-client.js" defer></script>
+<script src="js/scene1.js" defer></script>
+ 
+</body>
+</html>

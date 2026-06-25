@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene 5 — A Night Beneath the Stars</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Dancing+Script:wght@500;700&family=Inter:wght@300;400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/scene5.css">
+</head>
+
+<body>
+
+  <!-- ═══ ATMOSPHERE ════════════════════════════════════════════════════════ -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky-stars" id="skyStars"></div>
+    <div class="moon"></div>
+    <div class="clouds">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+    </div>
+    <div class="shooting-stars" id="shootingStars"></div>
+  </div>
+
+  <div class="carnival-bg" id="carnivalBg" aria-hidden="true">
+    <div class="ferris-wheel-distant">
+      <div class="fw-ring">
+        <div class="fw-spoke"></div>
+        <div class="fw-spoke" style="transform:rotate(45deg)"></div>
+        <div class="fw-spoke" style="transform:rotate(90deg)"></div>
+        <div class="fw-spoke" style="transform:rotate(135deg)"></div>
+      </div>
+      <div class="fw-base"></div>
+    </div>
+    <div class="carousel-distant"></div>
+    <div class="fog">
+      <div class="fog-layer fog-a"></div>
+      <div class="fog-layer fog-b"></div>
+    </div>
+    <div class="fireflies" id="fireflies"></div>
+  </div>
+
+  <!-- ═══ HUD ═══════════════════════════════════════════════════════════════ -->
+  <div class="hud" id="hud">
+    <button class="music-toggle" id="musicToggle" type="button" aria-pressed="true">
+      <span class="music-icon" aria-hidden="true">&#9834;</span><span id="musicLabel">Music on</span>
+    </button>
+  </div>
+
+  <!-- ═══ MAIN STAGE ════════════════════════════════════════════════════════ -->
+  <main class="stage" id="stage">
+
+    <!-- Phase 1: Intro -->
+    <section class="phase phase--intro is-active" id="phaseIntro">
+      <div class="intro-text-wrap">
+        <h1 class="intro-line" id="introLine1">Every celebration eventually becomes a memory...</h1>
+        <h1 class="intro-line" id="introLine2">But some nights stay with us forever.</h1>
+      </div>
+    </section>
+
+    <!-- Phase 2: Stargazing -->
+    <section class="phase phase--stargazing" id="phaseStargazing" hidden>
+      <div class="constellation-container" id="constellationContainer">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="constellation-ui">
+        <div class="constellation-info" id="constellationInfo">
+          <h2 class="c-title" id="cTitle">Orion</h2>
+          <p class="c-myth" id="cMyth">The Hunter of the Night Sky</p>
+          <p class="c-desc" id="cDesc">A majestic figure standing tall among the stars, forever watching over the cosmic
+            wilderness.</p>
+        </div>
+        <div class="c-controls">
+          <button class="c-btn" id="cPrev">❮</button>
+          <div class="c-dots" id="cDots"></div>
+          <button class="c-btn" id="cNext">❯</button>
+        </div>
+        <button class="btn-magic" id="finishStarsBtn" type="button"
+          style="opacity:0; pointer-events:none; margin-top:2rem;">Look Down</button>
+      </div>
+    </section>
+
+    <!-- Phase 3: The Letter -->
+    <section class="phase phase--letter" id="phaseLetter" hidden>
+      <div class="bench-scene">
+        <div class="lantern-glow"></div>
+        <div class="envelope-wrap" id="envelopeWrap">
+          <div class="envelope" id="envelope">
+            <div class="envelope-front"></div>
+            <div class="envelope-flap" id="envFlap">
+              <div class="wax-seal" id="waxSeal">A</div>
+            </div>
+            <div class="envelope-back"></div>
+            <div class="envelope-paper" id="envPaper"></div>
+          </div>
+          <p class="envelope-hint">A letter written from the vadapav...</p>
+        </div>
+      </div>
+
+      <!-- Full screen letter reading view -->
+      <div class="letter-reading-view" id="letterView">
+        <div class="parchment" id="parchment">
+          <div class="parchment-content">
+            <p class="greeting">Dearest Allen,</p>
+            <p>As the carnival lights begin to dim and the vibrant colors of the day soften into the midnight blue, I
+              wanted to leave you with one final thought.</p>
+            <p>Today was all about celebrating you—the joy you bring, the light you share, and the wonderful person you
+              are. But underneath the games, the laughter, and the cake, is a quiet appreciation for simply having you
+              in the world.</p>
+            <p>May this year bring you closer to your dreams, give you strength in your challenges, and surround you
+              with the love you truly deserve.</p>
+            <p>Keep shining, keep dreaming, and remember that no matter where the journey takes you, you are cherished.
+            </p>
+            <p class="closing">With all my love,</p>
+            <p class="signature">Your Best Friend</p>
+          </div>
+        </div>
+        <button class="btn-magic btn-close-letter" id="closeLetterBtn" type="button">Fold Letter</button>
+      </div>
+    </section>
+
+    <!-- Phase 4: Finale -->
+    <section class="phase phase--finale" id="phaseFinale" hidden>
+      <div class="finale-messages">
+        <h1 class="f-msg" id="fMsg1">Thank you for sharing this journey.</h1>
+        <h1 class="f-msg" id="fMsg2">Happy Birthday, Allen. </h1>
+        <h1 class="f-msg" id="fMsg3">Some moments end... but memories last forever i wish you a happy birthday 🥳🥳.
+        </h1>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Audio -->
+  <audio id="ambientMusic" src="media/scene1.mp3" loop preload="auto"></audio>
+
+  <script src="js/scene-router.js"></script>
+  <script src="js/music-client.js" defer></script>
+  <script src="js/scene5.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene 4 — The Birthday Cake Ceremony</title>
+  <link rel="stylesheet" href="css/scene4.css">
+</head>
+<body>
+
+  <!-- ═══ ATMOSPHERE ════════════════════════════════════════════════════════ -->
+  <div class="sky" aria-hidden="true">
+    <div class="sun-glow"></div>
+    <div class="sun-disc"></div>
+    <div class="sky-stars" id="skyStars"></div>
+  </div>
+  <div class="fog" aria-hidden="true">
+    <div class="fog-layer fog-a"></div>
+    <div class="fog-layer fog-b"></div>
+  </div>
+
+  <!-- Background carnival -->
+  <div class="carnival-bg" aria-hidden="true">
+    <div class="bg-wheel">
+      <div class="wheel-ring">
+        <span class="wh-spoke ws1"></span><span class="wh-spoke ws2"></span>
+        <span class="wh-spoke ws3"></span><span class="wh-spoke ws4"></span>
+        <span class="wh-cab wc1"></span><span class="wh-cab wc2"></span>
+        <span class="wh-cab wc3"></span><span class="wh-cab wc4"></span>
+        <span class="wh-cab wc5"></span><span class="wh-cab wc6"></span>
+        <span class="wh-cab wc7"></span><span class="wh-cab wc8"></span>
+        <span class="wh-hub"></span>
+      </div>
+      <span class="wh-leg wl-l"></span><span class="wh-leg wl-r"></span>
+      <span class="wh-base"></span>
+    </div>
+    <div class="bg-carousel-wrap">
+      <div class="bg-carousel-top"></div>
+      <div class="bg-carousel-body"></div>
+      <div class="bg-carousel-base"></div>
+    </div>
+    <div class="bg-stall bst-l"><span class="bst-sign">Sweets</span></div>
+    <div class="bg-stall bst-r"><span class="bst-sign">Gifts</span></div>
+    <div class="bg-flower-arch"><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- Lights & lanterns -->
+  <div class="lights-layer" aria-hidden="true">
+    <div class="string-lt sl-1">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="string-lt sl-2">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <div class="lantern ln-1"></div>
+    <div class="lantern ln-2"></div>
+    <div class="lantern ln-3"></div>
+    <div class="lantern ln-4"></div>
+    <div class="fireflies" id="fireflies"></div>
+  </div>
+
+  <!-- SVG ClipPaths for Cake Shapes -->
+  <svg width="0" height="0" style="position:absolute">
+    <clipPath id="heartClip" clipPathUnits="objectBoundingBox">
+      <path d="M0.5 0.95 C0.2 0.7 0 0.45 0 0.25 C0 0.1 0.1 0 0.25 0 C0.35 0 0.45 0.05 0.5 0.15 C0.55 0.05 0.65 0 0.75 0 C0.9 0 1 0.1 1 0.25 C1 0.45 0.8 0.7 0.5 0.95 Z" />
+    </clipPath>
+  </svg>
+
+  <!-- Ground -->
+  <div class="evt-ground" aria-hidden="true">
+    <div class="ground-glow"></div>
+    <div class="ending-path" id="endingPath"></div>
+  </div>
+
+  <!-- Bunting -->
+  <div class="bunting" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ═══ HUD ═══════════════════════════════════════════════════════════════ -->
+  <div class="hud-l"><div class="scene-badge">🌅 Evening</div></div>
+  <div class="hud-r">
+    <button class="music-toggle" id="musicToggle" type="button" aria-pressed="true" aria-label="Turn carnival music off">
+      <span class="music-icon" aria-hidden="true">&#9834;</span><span id="musicLabel">Music on</span>
+    </button>
+  </div>
+  <div class="hunt-counter" aria-label="Vadapav scavenger hunt progress">
+    <span aria-hidden="true">&#129364;</span><strong id="huntCount">0 / 5</strong>
+  </div>
+
+  <!-- ═══ MAIN STAGE ════════════════════════════════════════════════════════ -->
+  <main class="stage" id="stage">
+
+    <!-- Phase 1: Arrival -->
+    <section class="phase phase--arrival is-active" id="phaseArrival">
+      <div class="pavilion">
+        <div class="pavilion-arch">
+          <span class="pa-light"></span><span class="pa-light"></span><span class="pa-light"></span>
+          <span class="pa-light"></span><span class="pa-light"></span><span class="pa-light"></span>
+          <span class="pa-light"></span><span class="pa-light"></span><span class="pa-light"></span>
+        </div>
+        <div class="pavilion-glow"></div>
+      </div>
+      <h1 class="arrival-title">It's time to create<br><em>your birthday cake.</em></h1>
+      <button class="btn-magic btn-begin" id="beginBtn" type="button">🎂 Let's Begin</button>
+    </section>
+
+    <!-- Phase 2: Customize -->
+    <section class="phase phase--customize" id="phaseCustomize" hidden>
+      <div class="customize-step" id="stepFlavor">
+        <h2 class="step-title">🍰 Choose Your Flavor</h2>
+        <div class="card-row" data-category="flavor">
+          <button class="opt-card" data-value="chocolate" type="button"><span class="oc-icon">🍫</span><span class="oc-label">Chocolate</span></button>
+          <button class="opt-card" data-value="vanilla" type="button"><span class="oc-icon">🍦</span><span class="oc-label">Vanilla</span></button>
+          <button class="opt-card" data-value="strawberry" type="button"><span class="oc-icon">🍓</span><span class="oc-label">Strawberry</span></button>
+          <button class="opt-card" data-value="redvelvet" type="button"><span class="oc-icon">❤️</span><span class="oc-label">Red Velvet</span></button>
+          <button class="opt-card" data-value="butterscotch" type="button"><span class="oc-icon">🍯</span><span class="oc-label">Butterscotch</span></button>
+        </div>
+      </div>
+      <div class="customize-step" id="stepShape" hidden>
+        <h2 class="step-title">✨ Pick a Shape</h2>
+        <div class="card-row" data-category="shape">
+          <button class="opt-card" data-value="round" type="button"><span class="oc-icon">⭕</span><span class="oc-label">Round</span></button>
+          <button class="opt-card" data-value="heart" type="button"><span class="oc-icon">💜</span><span class="oc-label">Heart</span></button>
+          <button class="opt-card" data-value="square" type="button"><span class="oc-icon">⬜</span><span class="oc-label">Square</span></button>
+          <button class="opt-card" data-value="twotier" type="button"><span class="oc-icon">🎂</span><span class="oc-label">Two-tier</span></button>
+        </div>
+      </div>
+      <div class="customize-step" id="stepFrosting" hidden>
+        <h2 class="step-title">🧁 Select Your Frosting</h2>
+        <div class="card-row" data-category="frosting">
+          <button class="opt-card" data-value="chocolate" type="button"><span class="oc-icon">🍫</span><span class="oc-label">Chocolate</span></button>
+          <button class="opt-card" data-value="vanilla" type="button"><span class="oc-icon">🍦</span><span class="oc-label">Vanilla</span></button>
+          <button class="opt-card" data-value="strawberry" type="button"><span class="oc-icon">🍓</span><span class="oc-label">Strawberry</span></button>
+          <button class="opt-card" data-value="blueberry" type="button"><span class="oc-icon">🫐</span><span class="oc-label">Blueberry</span></button>
+          <button class="opt-card" data-value="whitecream" type="button"><span class="oc-icon">🤍</span><span class="oc-label">White Cream</span></button>
+        </div>
+      </div>
+      <div class="customize-step" id="stepDeco" hidden>
+        <h2 class="step-title">🎀 Add Decorations</h2>
+        <p class="step-hint">Select as many as you'd like</p>
+        <div class="card-row card-row--wrap" data-category="decoration">
+          <button class="opt-card opt-card--sm" data-value="strawberries" type="button"><span class="oc-icon">🍓</span><span class="oc-label">Strawberries</span></button>
+          <button class="opt-card opt-card--sm" data-value="chocolatecurls" type="button"><span class="oc-icon">🍫</span><span class="oc-label">Choco Curls</span></button>
+          <button class="opt-card opt-card--sm" data-value="macarons" type="button"><span class="oc-icon">🧁</span><span class="oc-label">Macarons</span></button>
+          <button class="opt-card opt-card--sm" data-value="sprinkles" type="button"><span class="oc-icon">🎊</span><span class="oc-label">Sprinkles</span></button>
+          <button class="opt-card opt-card--sm" data-value="candles" type="button"><span class="oc-icon">🕯️</span><span class="oc-label">Candles</span></button>
+          <button class="opt-card opt-card--sm" data-value="goldflakes" type="button"><span class="oc-icon">⭐</span><span class="oc-label">Gold Flakes</span></button>
+          <button class="opt-card opt-card--sm" data-value="roses" type="button"><span class="oc-icon">🌹</span><span class="oc-label">Roses</span></button>
+          <button class="opt-card opt-card--sm" data-value="pearls" type="button"><span class="oc-icon">💎</span><span class="oc-label">Pearls</span></button>
+          <button class="opt-card opt-card--sm" data-value="stars" type="button"><span class="oc-icon">🌟</span><span class="oc-label">Stars</span></button>
+        </div>
+        <button class="btn-magic btn-create" id="createBtn" type="button">✨ Create My Cake</button>
+      </div>
+    </section>
+
+    <!-- Phase 3-4: Assembly + Ready -->
+    <section class="phase phase--assembly" id="phaseAssembly" hidden>
+      <div class="cake-spotlight">
+        <div class="spotlight-beam"></div>
+        <div class="cake-container" id="cakeContainer"></div>
+      </div>
+      <p class="assembly-text" id="assemblyText" aria-live="polite"></p>
+      <h2 class="ready-title" id="readyTitle" hidden>Your masterpiece is ready.</h2>
+      <button class="btn-magic btn-cut" id="cutBtn" type="button" hidden>🎂 Cut the Birthday Cake</button>
+    </section>
+
+    <!-- Phase 6: Celebration -->
+    <section class="phase phase--celebration" id="phaseCelebration" hidden>
+      <h1 class="celeb-title" id="celebTitle">🎉 Happy Birthday Allen! 🎉</h1>
+      <p class="celeb-sub" id="celebSub">May this year bring you endless happiness, unforgettable memories, and every dream your heart wishes for.</p>
+    </section>
+
+    <!-- Phase 7: Ending -->
+    <section class="phase phase--ending" id="phaseEnding" hidden>
+      <p class="ending-text" id="endingText">"One final surprise awaits..."</p>
+    </section>
+
+  </main>
+
+  <!-- Cutting overlay -->
+  <div class="knife-overlay" id="knifeOverlay" hidden aria-hidden="true">
+    <div class="knife" id="knife">
+      <div class="knife-blade"></div>
+      <div class="knife-handle"></div>
+      <div class="knife-gleam"></div>
+    </div>
+    <div class="knife-sparkles" id="knifeSparkles"></div>
+    <div class="cut-glow" id="cutGlow"></div>
+  </div>
+
+  <!-- Celebration layers -->
+  <canvas class="confetti-canvas" id="confettiCanvas" aria-hidden="true"></canvas>
+  <div class="fireworks-layer" id="fireworksLayer" aria-hidden="true"></div>
+  <div class="balloons-layer" id="balloonsLayer" aria-hidden="true"></div>
+  <div class="hearts-layer" id="heartsLayer" aria-hidden="true"></div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/scene-router.js"></script>
+  <script src="js/music-client.js" defer></script>
+  <script src="js/scene4.js" defer></script>
+</body>
+</html>

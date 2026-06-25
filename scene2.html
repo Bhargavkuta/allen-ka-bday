@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene 2 — Morning Carnival</title>
+  <link rel="stylesheet" href="css/scene2.css">
+</head>
+<body>
+  <main class="stage">
+    <div class="sky">
+      <div class="sun" aria-hidden="true"></div>
+      <div class="cloud cloud-one" aria-hidden="true"></div>
+      <div class="cloud cloud-two" aria-hidden="true"></div>
+      <div class="cloud cloud-three" aria-hidden="true"></div>
+    </div>
+ 
+    <div class="bunting" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+ 
+    <button class="music-toggle" id="musicToggle" type="button" aria-pressed="true" aria-label="Turn carnival music off">
+      <span class="music-icon" aria-hidden="true">♪</span><span id="musicLabel">Music on</span>
+    </button>
+ 
+    <div class="hunt-counter" aria-label="Vadapav scavenger hunt progress">
+      <span aria-hidden="true">🥔</span><strong id="huntCount">0 / 5</strong>
+    </div>
+ 
+    <button class="hidden-vadapav vada-ticket" data-vadapav-id="morning-ticket-gremlin" aria-label="A tiny vadapav is hiding behind the morning ticket crate">
+      <span class="vada-bun"></span><span class="vada-filling"></span>
+      <span class="vada-eye left"></span><span class="vada-eye right"></span><span class="vada-mouth"></span>
+    </button>
+ 
+    <button class="hidden-vadapav vada-flag" data-vadapav-id="morning-flag-napper" aria-label="A tiny vadapav is tangled in the bunting flags">
+      <span class="vada-bun"></span><span class="vada-filling"></span>
+      <span class="vada-eye left"></span><span class="vada-eye right"></span><span class="vada-mouth"></span>
+    </button>
+ 
+    <section class="hero">
+      <p class="eyebrow">☀️ Scene 2 — Morning</p>
+      <h1>The carnival is waking up.</h1>
+      <p class="intro">Warm lights, sleepy booths, flags doing their little dance — pick an attraction and earn your morning stamps.</p>
+    </section>
+ 
+    <section class="midway" aria-label="Morning carnival games">
+      <article class="booth puzzle-booth">
+        <div class="booth-roof"></div>
+        <div class="booth-sign">Jigsaw Booth</div>
+        <div class="booth-body">
+          <div class="booth-icon" aria-hidden="true">🎯</div>
+          <h2>Morning Jigsaw</h2>
+          <p id="triviaQuestion">Solve for a sweet treat :3</p>
+          <div class="jigsaw-board" id="jigsawBoard" aria-label="Click two puzzle tiles to swap them"></div>
+          <div class="scramble-actions">
+            <button class="game-btn" id="checkJigsaw" type="button">Check puzzle</button>
+            <button class="ghost-btn" id="shuffleJigsaw" type="button">Shuffle</button>
+          </div>
+          <p class="result" id="jigsawResult" aria-live="polite"></p>
+        </div>
+      </article>
+ 
+      <article class="booth carousel-booth">
+        <div class="booth-roof"></div>
+        <div class="booth-sign">Compliment Carousel</div>
+        <div class="booth-body">
+          <div class="carousel" aria-hidden="true">
+            <span>🎠</span>
+            <span>✨</span>
+            <span>🎠</span>
+          </div>
+          <h2>Spin for a Compliment</h2>
+          <p class="compliment-card" id="complimentCard">Click spin. The carousel is being dramatic but true.</p>
+          <button class="game-btn" id="spinCompliment">Spin carousel</button>
+        </div>
+      </article>
+ 
+      <article class="booth scramble-booth">
+        <div class="booth-roof"></div>
+        <div class="booth-sign">Word Scramble</div>
+        <div class="booth-body">
+          <div class="booth-icon" aria-hidden="true">🔤</div>
+          <h2>Unscramble the Password</h2>
+          <p class="scramble-word" id="scrambleWord">DLIEFRN</p>
+          <label class="sr-only" for="scrambleInput">Word scramble answer</label>
+          <input id="scrambleInput" type="text" autocomplete="off" placeholder="type answer here">
+          <div class="scramble-actions">
+            <button class="game-btn" id="checkScramble">Check</button>
+            <button class="ghost-btn" id="newScramble">New word</button>
+          </div>
+          <p class="result" id="scrambleResult" aria-live="polite"></p>
+        </div>
+      </article>
+    </section>
+ 
+    <section class="stamp-card" aria-label="Morning progress">
+      <div>
+        <span class="stamp" id="jigsawStamp">Jigsaw</span>
+        <span class="stamp" id="complimentStamp">Compliment</span>
+        <span class="stamp" id="scrambleStamp">Scramble</span>
+      </div>
+      <button class="continue-btn" id="continueBtn" type="button">Head to Afternoon →</button>
+    </section>
+ 
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+ 
+  <script src="js/scene-router.js"></script>
+  <script src="js/music-client.js" defer></script>
+  <script src="js/scene2.js" defer></script>
+  <script src="js/jigsaw.js" defer></script>
+</body>
+</html>

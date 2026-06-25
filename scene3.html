@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene 3 — Afternoon Carnival</title>
+  <link rel="stylesheet" href="css/scene3.css">
+</head>
+<body>
+
+  <!-- Atmosphere layers -->
+  <div class="sky" aria-hidden="true">
+    <div class="sun-haze"></div>
+    <div class="sun"></div>
+    <div class="dust-motes" id="dustMotes"></div>
+  </div>
+  <div class="ground" aria-hidden="true">
+    <div class="ground-shimmer"></div>
+  </div>
+  <div class="midway-backdrop" aria-hidden="true">
+    <div class="far-wheel">
+      <div class="wheel-orbit">
+        <span class="spoke s1"></span><span class="spoke s2"></span><span class="spoke s3"></span><span class="spoke s4"></span>
+        <span class="cabin c1"></span><span class="cabin c2"></span><span class="cabin c3"></span><span class="cabin c4"></span>
+        <span class="cabin c5"></span><span class="cabin c6"></span><span class="cabin c7"></span><span class="cabin c8"></span>
+        <span class="hub"></span>
+      </div>
+      <span class="wheel-leg left"></span><span class="wheel-leg right"></span><span class="wheel-base"></span>
+    </div>
+    <div class="stall stall-one"><span class="stall-sign">Sweets</span><span class="stall-counter"></span></div>
+    <div class="stall stall-two"><span class="stall-sign">Prizes</span><span class="stall-counter"></span></div>
+    <div class="flower-arch"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="lightline">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Bunting -->
+  <div class="bunting" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud-left">
+    <div class="scene-badge">🌤️ Afternoon</div>
+  </div>
+  <div class="hud-right">
+    <button class="music-toggle" id="musicToggle" type="button" aria-pressed="true" aria-label="Turn carnival music off">
+      <span class="music-icon" aria-hidden="true">&#9834;</span><span id="musicLabel">Music on</span>
+    </button>
+    <div class="stamp-tray" aria-label="Afternoon progress">
+      <span class="stamp" id="matchStamp" aria-label="Memory match stamp">🃏</span>
+      <span class="stamp" id="tossStamp"  aria-label="Ring toss stamp">🎯</span>
+    </div>
+  </div>
+
+  <div class="hunt-counter" aria-label="Vadapav scavenger hunt progress">
+    <span aria-hidden="true">&#129364;</span><strong id="huntCount">0 / 5</strong>
+  </div>
+
+  <button class="hidden-vadapav vada-sun" data-vadapav-id="afternoon-sun-bather" aria-label="A tiny vadapav is hiding in the afternoon sun haze">
+    <span class="vada-bun"></span><span class="vada-filling"></span>
+    <span class="vada-eye left"></span><span class="vada-eye right"></span><span class="vada-mouth"></span>
+  </button>
+  <button class="hidden-vadapav vada-wheel" data-vadapav-id="afternoon-wheel-peek" aria-label="A tiny vadapav is peeking from the far wheel">
+    <span class="vada-bun"></span><span class="vada-filling"></span>
+    <span class="vada-eye left"></span><span class="vada-eye right"></span><span class="vada-mouth"></span>
+  </button>
+  <main class="stage">
+
+    <!-- Hero -->
+    <header class="hero">
+      <p class="eyebrow">Peak carnival hours</p>
+      <h1>Golden hour<br><em>at the midway.</em></h1>
+      <p class="intro">Two booths, one afternoon. Earn both stamps and the evening opens up.</p>
+    </header>
+
+    <!-- Booths -->
+    <section class="midway" aria-label="Afternoon carnival games">
+
+      <!-- ── MEMORY MATCH ─────────────────────────────────────── -->
+      <article class="booth booth--match" id="matchBooth">
+        <div class="booth-roof" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="booth-sign">Memory Match</div>
+        <div class="booth-body">
+          <p class="booth-intro">Find all the pairs. Cards remember nothing — just like the internet.</p>
+
+          <div class="match-meta">
+            <span class="match-stat">Moves: <strong id="moveCount">0</strong></span>
+            <span class="match-stat">Pairs: <strong id="pairCount">0</strong> / 8</span>
+          </div>
+
+          <div class="match-grid" id="matchGrid" role="grid" aria-label="Memory match card grid"></div>
+
+          <div class="booth-actions">
+            <button class="btn-primary" id="matchRestart" type="button">Shuffle & restart</button>
+          </div>
+          <p class="result-msg" id="matchResult" aria-live="polite"></p>
+        </div>
+        <div class="booth-shadow" aria-hidden="true"></div>
+      </article>
+
+      <!-- ── RING TOSS ────────────────────────────────────────── -->
+      <article class="booth booth--toss" id="tossBooth">
+        <div class="booth-roof" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="booth-sign">Ring Toss</div>
+        <div class="booth-body">
+          <p class="booth-intro">Toss a ring onto a peg to reveal something cool (facts or myths u decide :3), Land all 5 to earn the stamp.</p>
+
+          <div class="toss-arena" aria-label="Ring toss game" id="tossArena">
+            <div class="pegs-row" id="pegsRow">
+              <!-- 5 pegs, built by JS -->
+            </div>
+            <div class="throw-zone">
+              <div class="ring" id="ring" aria-hidden="true"></div>
+              <button class="btn-toss" id="tossBtn" type="button">🎯 Toss!</button>
+            </div>
+          </div>
+
+          <div class="fact-reveal" id="factReveal" aria-live="polite">
+            <p id="factText">Land a ring to reveal a fact about Allen.</p>
+          </div>
+
+          <p class="result-msg" id="tossResult" aria-live="polite"></p>
+        </div>
+        <div class="booth-shadow" aria-hidden="true"></div>
+      </article>
+
+    </section>
+
+    <!-- Continue -->
+    <footer class="scene-footer">
+      <button class="btn-continue" id="continueBtn" type="button" disabled>
+        Head to Evening →
+      </button>
+    </footer>
+
+    <section class="evening-preview" id="eveningPreview" tabindex="-1" hidden>
+      <p class="preview-kicker">Evening unlock</p>
+      <h2>Evening carnival coming next.</h2>
+      <p>Fortune Teller, Live Stage, and the midnight finale.</p>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/scene-router.js"></script>
+  <script src="js/music-client.js" defer></script>
+  <script src="js/scene3.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600&display=swap');
+ 
+  :root{
+    --sky-top:#2D3561;
+    --sky-mid:#7A5B82;
+    --sky-low:#E8929C;
+    --sky-horizon:#FFC288;
+    --mtn-far:#3A3158;
+    --mtn-mid:#52406F;
+    --mtn-near:#6B5184;
+    --cream:#FFF4E0;
+    --red:#C84B4B;
+    --ink:#2A2240;
+ 
+    /* Shared timing tokens — single source of truth for the dawn->day transition.
+       Every element below references these instead of repeating literals,
+       so changing the pace of the sunrise means changing ONE value. */
+    --rise-duration:6s;
+    --ease-rise:cubic-bezier(.16,1,.3,1); /* expo-out: fast start, long natural decel — how a sunrise actually reads, not a linear elevator */
+    --fade-duration:2.5s;
+  }
+ 
+  *{margin:0;padding:0;box-sizing:border-box;}
+ 
+  html,body{
+    width:100%;height:100%;
+    overflow:hidden;
+    background:#16142b;
+    font-family:'Nunito',sans-serif;
+  }
+ 
+  .stage{
+    position:relative;
+    width:100%;
+    height:100vh;
+    min-height:560px;
+    overflow:hidden;
+  }
+ 
+  /* SKY - stays on the dawn pink/orange gradient permanently.
+     The sun still rises and the brightness overlay still lightens the scene,
+     but the sky color itself no longer shifts to a blue daylight palette. */
+  .sky{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom,
+      var(--sky-top) 0%,
+      var(--sky-mid) 38%,
+      var(--sky-low) 68%,
+      var(--sky-horizon) 100%);
+  }
+ 
+  /* Brightness overlay - progressively lightens the whole stage as the sun ascends.
+     Deliberately starts ~0.4s after the sky and runs slightly longer, so brightness
+     reads as "catching up" to the color shift rather than moving in identical lockstep
+     with it — that offset is what sells "progressive" rather than "instant cut". */
+  .daylight-overlay{
+    position:absolute;
+    inset:0;
+    background:#FFF7E6;
+    opacity:0;
+    mix-blend-mode:soft-light;
+    pointer-events:none;
+    transition:opacity calc(var(--rise-duration) + 0.8s) var(--ease-rise) 0.4s;
+    z-index:6;
+  }
+  .daylight-overlay.is-rising{
+    opacity:0.85;
+  }
+ 
+  /* STARS - fade out only once rising starts */
+  .stars{
+    position:absolute;
+    inset:0;
+    opacity:0.8;
+    transition:opacity var(--fade-duration) ease-out;
+  }
+  .stars.is-rising{
+    opacity:0;
+  }
+  .star{
+    position:absolute;
+    width:2px;height:2px;
+    background:#fff;
+    border-radius:50%;
+  }
+ 
+  /* MIST */
+  .mist{
+    position:absolute;
+    bottom:18%;
+    left:0;width:100%;height:30%;
+    background:linear-gradient(to top, rgba(255,244,224,0.25), transparent);
+    filter:blur(6px);
+    animation:mistDrift 14s ease-in-out infinite alternate;
+    pointer-events:none;
+    transition:opacity calc(var(--rise-duration) * 0.65) ease 1.5s;
+  }
+  .mist.is-rising{
+    opacity:0;
+  }
+  @keyframes mistDrift{
+    from{transform:translateX(-2%);}
+    to{transform:translateX(2%);}
+  }
+ 
+  /* SUN - idle low on horizon until rising is triggered.
+     Uses transform (not top) so the browser can composite this on the GPU
+     instead of running layout+paint every frame of a 6s transition. */
+  .sun-wrap{
+    position:absolute;
+    left:50%;
+    bottom:22%;
+    transform:translateX(-50%);
+    width:90px;height:90px;
+  }
+  .sun{
+    width:100%;height:100%;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #FFE9B8, #FFB25E 60%, #FF9248 100%);
+    box-shadow:0 0 40px 10px rgba(255,178,94,0.55);
+    position:relative;
+    top:0;
+    transform:translateY(60px);
+    opacity:0.85;
+    transition:
+      transform var(--rise-duration) var(--ease-rise),
+      box-shadow var(--rise-duration) var(--ease-rise),
+      opacity 1s ease;
+    will-change:transform;
+  }
+  .sun.is-rising{
+    transform:translateY(-100px);
+    box-shadow:0 0 70px 24px rgba(255,233,184,0.7);
+    opacity:1;
+  }
+ 
+  /* MOUNTAINS - layered parallax, Altos Adventure style flat silhouettes */
+  .mountains{
+    position:absolute;
+    bottom:0;left:0;width:100%;
+    height:60%;
+  }
+  .mtn-layer{
+    position:absolute;
+    bottom:0;left:0;
+    width:140%;
+    height:100%;
+  }
+  .mtn-far{ fill:var(--mtn-far); opacity:0.9; animation:driftFar 40s linear infinite alternate; transition:fill var(--rise-duration) var(--ease-rise), opacity var(--rise-duration) var(--ease-rise);}
+  .mtn-mid{ fill:var(--mtn-mid); opacity:0.95; animation:driftMid 28s linear infinite alternate; transition:fill var(--rise-duration) var(--ease-rise), opacity var(--rise-duration) var(--ease-rise);}
+  .mtn-near{ fill:var(--mtn-near); animation:driftNear 18s linear infinite alternate; transition:fill var(--rise-duration) var(--ease-rise);}
+ 
+  .mountains.is-rising .mtn-far{ fill:#6B5B95; opacity:0.85; }
+  .mountains.is-rising .mtn-mid{ fill:#8A6BA8; opacity:0.9; }
+  .mountains.is-rising .mtn-near{ fill:#A8729A; }
+ 
+  @keyframes driftFar{ from{transform:translateX(0);} to{transform:translateX(-3%);} }
+  @keyframes driftMid{ from{transform:translateX(0);} to{transform:translateX(-5%);} }
+  @keyframes driftNear{ from{transform:translateX(0);} to{transform:translateX(-7%);} }
+ 
+  /* CARNIVAL — layered storybook midway */
+  .carnival{
+    position:absolute;
+    bottom:0;left:0;width:100%;
+    height:38%;
+    z-index:5;
+    overflow:visible;
+    filter:drop-shadow(0 -8px 18px rgba(27,18,48,.18));
+  }
+  .ground{fill:#201a35;}
+  .structure{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round;}
+  .wheel-rim{stroke-width:7;}
+  .wheel-spoke{stroke-width:3;opacity:.82;}
+  .wheel{transform-origin:220px 157px;animation:wheelTurn 34s linear infinite;}
+  .gondola{fill:#C84B4B;stroke:#FFF4E0;stroke-width:2;}
+  .tent{fill:var(--ink);}
+  .tent-stripe{fill:#C84B4B;opacity:.9;}
+  .tent-opening{fill:#17132a;}
+  .booth{fill:#302744;stroke:#FFF4E0;stroke-width:2;}
+  .booth-roof{fill:#C84B4B;}
+  .sign{fill:#FFF4E0;stroke:#C84B4B;stroke-width:3;}
+  .sign-text{fill:#2A2240;font:800 18px 'Baloo 2',sans-serif;letter-spacing:2px;text-anchor:middle;}
+  .flag{fill:#C84B4B;transform-box:fill-box;transform-origin:left center;animation:flagWave 2.2s ease-in-out infinite alternate;}
+  .bunting{fill:#FFF4E0;stroke:#2A2240;stroke-width:1;}
+  .light{
+    fill:var(--cream);
+    opacity:0.38;
+    transition:opacity 0.6s ease;
+    filter:drop-shadow(0 0 5px #FFC56F);
+  }
+  .light:nth-child(3n){ fill:var(--red); }
+  /* Delays now scale with --rise-duration via calc(), so if the rise speeds up
+     or slows down, lights still land proportionally inside the same window
+     instead of firing late (or early) against a duration they weren't tuned for. */
+  .carnival.is-rising .light{
+    animation:flicker 3.2s infinite ease-in-out;
+  }
+  .carnival.is-rising .light:nth-child(odd){ animation-delay:calc(var(--rise-duration) * 0.07); }
+  .carnival.is-rising .light:nth-child(3n){ animation-delay:calc(var(--rise-duration) * 0.15); }
+  .carnival.is-rising .light:nth-child(5n){ animation-delay:calc(var(--rise-duration) * 0.27); }
+  @keyframes flicker{
+    0%,100%{opacity:0.15;}
+    45%{opacity:0.2;}
+    50%{opacity:0.95;}
+    55%{opacity:0.3;}
+    60%{opacity:0.9;}
+    75%{opacity:0.85;}
+  }
+  @keyframes wheelTurn{to{transform:rotate(360deg);}}
+  @keyframes flagWave{to{transform:skewY(8deg) scaleX(.92);}}
+ 
+  /* MESSAGE */
+  .message-wrap{
+    position:absolute;
+    top:0;left:0;width:100%;height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    z-index:10;
+    padding:0 24px;
+    pointer-events:none;
+  }
+  .greeting{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    color:var(--cream);
+    font-size:clamp(28px, 5vw, 52px);
+    text-shadow:0 2px 18px rgba(0,0,0,0.35);
+    opacity:0;
+    transform:translateY(14px);
+    animation:riseIn 1s ease forwards;
+    animation-delay:0.3s;
+    line-height:1.25;
+    transition:color calc(var(--rise-duration) * 0.7) ease, text-shadow calc(var(--rise-duration) * 0.7) ease;
+  }
+  .greeting .accent{
+    color:var(--red);
+    -webkit-text-stroke:1px var(--cream);
+  }
+  .greeting.is-rising{
+    color:var(--ink);
+    text-shadow:0 2px 10px rgba(255,255,255,0.4);
+  }
+  .greeting.is-rising .accent{
+    -webkit-text-stroke:1px var(--ink);
+  }
+  .subtext{
+    font-family:'Nunito',sans-serif;
+    font-weight:600;
+    color:var(--cream);
+    opacity:0;
+    font-size:clamp(14px,2vw,18px);
+    margin-top:14px;
+    max-width:480px;
+    transform:translateY(10px);
+    animation:riseIn 1s ease forwards;
+    animation-delay:0.8s;
+    transition:color calc(var(--rise-duration) * 0.7) ease;
+  }
+  .subtext.is-rising{
+    color:var(--ink);
+  }
+ 
+  @keyframes riseIn{
+    to{opacity:1; transform:translateY(0);}
+  }
+ 
+  /* TICKET BUTTON */
+  .ticket-btn{
+    margin-top:38px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:clamp(16px,2.4vw,20px);
+    color:var(--ink);
+    background:var(--cream);
+    border:3px dashed var(--red);
+    border-radius:14px;
+    padding:14px 34px;
+    cursor:pointer;
+    pointer-events:auto;
+    letter-spacing:0.3px;
+    opacity:0;
+    transform:translateY(10px) scale(0.96);
+    animation:riseIn 1s ease forwards, glowPulse 2.4s ease-in-out infinite;
+    animation-delay:1.3s, 2.5s;
+    box-shadow:0 0 0 0 rgba(255,178,94,0.6);
+    transition:transform 0.2s ease, box-shadow 0.2s ease, opacity 0.5s ease;
+  }
+  .ticket-btn:hover{
+    transform:translateY(-2px) scale(1.03);
+  }
+  .ticket-btn:active{
+    transform:translateY(0) scale(0.98);
+  }
+  .ticket-btn.is-hidden{
+    opacity:0 !important;
+    pointer-events:none;
+    transform:translateY(-6px) scale(0.96) !important;
+  }
+  @keyframes glowPulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(255,178,94,0.45); }
+    50%{ box-shadow:0 0 0 14px rgba(255,178,94,0); }
+  }
+ 
+  /* CONTINUE BUTTON - appears once daylight has fully arrived */
+  .continue-btn{
+    margin-top:38px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:clamp(16px,2.4vw,20px);
+    color:var(--cream);
+    background:var(--red);
+    border:none;
+    border-radius:14px;
+    padding:14px 34px;
+    cursor:pointer;
+    letter-spacing:0.3px;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(10px) scale(0.96);
+    transition:opacity 0.6s ease, transform 0.3s ease;
+  }
+  .continue-btn.is-visible{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+  .continue-btn:hover{
+    transform:translateY(-2px) scale(1.03);
+  }
+ 
+  /* SKIP HINT - appears only while the transition is actively running,
+     gives impatient users (or anyone whose device drops frames) an escape hatch */
+  .skip-hint{
+    position:absolute;
+    bottom:24px;
+    right:24px;
+    z-index:20;
+    font-family:'Nunito',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    color:var(--cream);
+    background:rgba(42,34,64,0.45);
+    border:1px solid rgba(255,244,224,0.35);
+    border-radius:20px;
+    padding:8px 16px;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.3s ease;
+  }
+  .skip-hint.is-visible{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .skip-hint:hover{
+    background:rgba(42,34,64,0.65);
+  }
+
+  /* OPTIONAL VADAPAV HUNT — shared storage lets future scenes join the same quest. */
+  .hunt-counter{
+    position:absolute;top:20px;right:20px;z-index:24;
+    display:flex;align-items:center;gap:8px;
+    padding:8px 13px;border:1px solid rgba(255,244,224,.3);border-radius:999px;
+    color:var(--cream);background:rgba(31,24,52,.38);backdrop-filter:blur(8px);
+    font:700 13px 'Nunito',sans-serif;box-shadow:0 8px 24px rgba(26,18,45,.12);
+  }
+  .hunt-counter strong{font-family:'Baloo 2',sans-serif;font-size:15px;}
+  .music-toggle{
+    position:absolute;top:20px;left:20px;z-index:24;
+    display:flex;align-items:center;gap:8px;padding:8px 13px;
+    border:1px solid rgba(255,244,224,.3);border-radius:999px;
+    color:var(--cream);background:rgba(31,24,52,.38);backdrop-filter:blur(8px);
+    font:700 13px 'Nunito',sans-serif;cursor:pointer;
+    box-shadow:0 8px 24px rgba(26,18,45,.12);transition:background .2s ease,transform .2s ease;
+  }
+  .music-toggle:hover{background:rgba(31,24,52,.62);transform:translateY(-1px);}
+  .music-toggle:focus-visible{outline:2px solid var(--cream);outline-offset:3px;}
+  .music-icon{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--red);font:800 15px 'Baloo 2',sans-serif;}
+  .music-toggle[aria-pressed="true"] .music-icon{animation:musicBeat 1.25s ease-in-out infinite;box-shadow:0 0 12px rgba(255,194,136,.75);}
+  .hidden-vadapav{
+    position:absolute;left:7%;bottom:27%;z-index:7;width:58px;height:58px;
+    border:0;background:transparent;cursor:pointer;filter:drop-shadow(0 6px 6px rgba(28,18,45,.25));
+    transform:translateY(34px) rotate(-8deg);transition:transform .28s var(--ease-rise),filter .25s ease;
+  }
+  .hidden-vadapav:hover,.hidden-vadapav:focus-visible{transform:translateY(18px) rotate(4deg) scale(1.08);outline:none;filter:drop-shadow(0 7px 8px rgba(28,18,45,.35));}
+  .vada-bun{position:absolute;inset:9px 4px;border-radius:50% 50% 44% 44%;background:#E8A153;border:3px solid #2A2240;}
+  .vada-filling{position:absolute;left:2px;right:2px;top:26px;height:13px;border-radius:9px;background:#C84B4B;border:3px solid #2A2240;transform:rotate(-3deg);}
+  .vada-eye{position:absolute;top:25px;width:5px;height:7px;border-radius:50%;background:#2A2240;z-index:2;}
+  .vada-eye.left{left:21px}.vada-eye.right{right:21px}
+  .vada-mouth{position:absolute;left:26px;top:34px;width:9px;height:5px;border-bottom:2px solid #2A2240;border-radius:50%;z-index:2;}
+  .hidden-vadapav.is-found{pointer-events:none;animation:vadaFound .75s cubic-bezier(.2,.9,.25,1) forwards;}
+  .hunt-toast{
+    position:absolute;left:50%;bottom:25px;z-index:25;max-width:min(420px,calc(100% - 32px));
+    padding:13px 18px;border:2px solid var(--cream);border-radius:14px;
+    color:var(--cream);background:rgba(42,34,64,.92);text-align:center;
+    font:700 14px 'Nunito',sans-serif;box-shadow:0 12px 30px rgba(24,16,40,.3);
+    opacity:0;pointer-events:none;transform:translate(-50%,15px) scale(.96);transition:opacity .25s ease,transform .25s ease;
+  }
+  .hunt-toast.is-visible{opacity:1;transform:translate(-50%,0) scale(1);}
+  @keyframes vadaFound{45%{transform:translateY(-45px) rotate(14deg) scale(1.2)}100%{transform:translate(110px,-130px) rotate(35deg) scale(.2);opacity:0}}
+  @keyframes musicBeat{50%{transform:scale(1.16) rotate(-6deg)}}
+ 
+  @media (prefers-reduced-motion: reduce){
+    .sun, .stars, .mist, .mtn-far, .mtn-mid, .mtn-near, .light, .wheel, .flag, .hidden-vadapav, .music-icon, .greeting, .subtext, .ticket-btn{
+      animation-duration:0.01s !important;
+      animation-delay:0s !important;
+    }
+    .sky, .sun, .stars, .mist, .daylight-overlay, .greeting, .subtext, .mtn-far, .mtn-mid, .mtn-near{
+      transition-duration:0.01s !important;
+      transition-delay:0s !important;
+    }
+  }
